@@ -1,0 +1,23 @@
+services:
+  redis:
+    image: redis:7.4-alpine
+    container_name: redis-primitives-test
+    ports:
+      # 56380, not 6379, so this never collides with another project's Redis.
+      - "56380:6379"
+    command:
+      - redis-server
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      # The fencing counter must never be evicted. If it were, INCR would
+      # restart from 1 and tokens would stop being monotonic, which silently
+      # destroys the only guarantee this library actually offers.
+      - --maxmemory-policy
+      - noeviction
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
