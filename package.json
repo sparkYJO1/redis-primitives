@@ -1,19 +1,57 @@
 {
   "name": "redis-primitives",
   "version": "0.1.0",
-  "private": true,
   "description": "Distributed lock with fencing tokens, sliding-window rate limiter, and leader election on a single Redis instance. Tests demonstrate the failure modes.",
+  "license": "MIT",
+  "author": "John Yoon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparkYJO1/redis-primitives.git"
+  },
+  "homepage": "https://github.com/sparkYJO1/redis-primitives#readme",
+  "bugs": {
+    "url": "https://github.com/sparkYJO1/redis-primitives/issues"
+  },
+  "keywords": [
+    "redis",
+    "distributed-lock",
+    "fencing-token",
+    "rate-limiter",
+    "sliding-window",
+    "leader-election",
+    "ioredis",
+    "distributed-systems"
+  ],
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=20"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "tsc -p tsconfig.build.json",
     "redis:up": "docker compose up -d --wait",
     "redis:down": "docker compose down -v",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "experiment:watch-multi": "tsx experiments/watch-multi-race.ts"
+    "experiment:watch-multi": "tsx experiments/watch-multi-race.ts",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "ioredis": "^5.4.1"
@@ -23,7 +61,5 @@
     "tsx": "^4.23.13",
     "typescript": "^5.9.3",
     "vitest": "^5.0.0"
-  },
-  "license": "MIT",
-  "author": "John Yoon"
+  }
 }
